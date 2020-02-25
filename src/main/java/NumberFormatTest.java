@@ -1,3 +1,5 @@
+import org.apache.commons.validator.routines.DoubleValidator;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -5,8 +7,8 @@ public class NumberFormatTest {
 
     public static void main(String[] args){
 
-        System.out.println(getStringValue("2,345,123", NumberFormat.getInstance(Locale.US)));
-        System.out.println(getStringValue("2,345,123", NumberFormat.getInstance(Locale.FRANCE)));
+        System.out.println(getStringValue("2,345,123.001", NumberFormat.getInstance(Locale.US)));
+        System.out.println(getStringValue("2,345,123.001", NumberFormat.getInstance(Locale.FRANCE)));
         System.out.println(getStringValue("2020",  NumberFormat.getInstance(Locale.US)));
         System.out.println(getStringValue("2020", NumberFormat.getInstance(Locale.FRANCE)));
         System.out.println(getStringValue("10 U.S.",  NumberFormat.getInstance(Locale.US)));
@@ -21,7 +23,9 @@ public class NumberFormatTest {
             try {
                 String temp = originalValue.replace(",", "");
                 Double number = Double.parseDouble(temp);
-                targetNumberFormat.setMinimumFractionDigits(temp.substring(temp.indexOf("."), temp.length()).length()-1);
+                if(temp.indexOf(".") != -1){
+                    targetNumberFormat.setMinimumFractionDigits(temp.substring(temp.indexOf("."), temp.length()).length()-1);
+                }
                 return targetNumberFormat.format(number);
             } catch (NumberFormatException ex2) {
                 return originalValue;
